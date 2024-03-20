@@ -3,16 +3,18 @@ session_start();
 include 'user_action.php';
 
 $userAction = new UserAction();
+$login_error = ""; // Initialize login error message
 
 // Handle user login
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'login') {
     $login_result = $userAction->login($_POST['username'], $_POST['password']);
-    if ($login_result === true) {
-        // Login successful, redirect user to dashboard or any other page
-        header("Location: /opt/lampp/htdocs/house_rental/dashboard.php");
+    if ($login_result['success']) {
+        // Login successful, redirect user to dashboard
+        header("Location: user_dashboard.php");
         exit();
     } else {
-        $login_error = "Invalid username or password"; // Display login error message
+        // Login failed, set error message
+        $login_error = $login_result['message'];
     }
 }
 ?>
@@ -23,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Login</title>
     <style>
+        /* Add your CSS styles here */
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
@@ -99,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 <body>
     <div class="container">
         <h2>User Login</h2>
-        <?php if (isset($login_error)): ?>
+        <?php if (!empty($login_error)): ?>
             <p class="error-message"><?php echo $login_error; ?></p>
         <?php endif; ?>
         <form method="post" action="">

@@ -77,10 +77,111 @@
 <body>
     <div class="container">
         <h2>User Registration</h2>
-        <?php if (isset($registration_message)): ?>
-            <p class="<?php echo $registration_success ? 'success-message' : 'error-message'; ?>"><?php echo $registration_message; ?></p>
-        <?php endif; ?>
-        <form id="registrationForm" method="post" action="user_action.php">
+        <?php
+        class UserAction {
+            private $db;
+        
+            public function __construct() {
+                include 'db_connect.php'; // Include your database connection script
+                $this->db = $conn;
+            }
+        
+            public function register($username, $password) {
+                try {
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        
+                    // Check if the username already exists
+                    $stmt = $this->db->prepare("SELECT * FROM tenants_accounts WHERE username = ?");
+                    $stmt->bind_param("s", $username);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+        
+                    if ($result->num_rows > 0) {
+                        return array("success" => false, "message" => "Username already exists");
+                    }
+        
+                    // Insert user details into tenants_accounts table
+                    $stmt = $this->db->prepare("INSERT INTO tenants_accounts (username, password) VALUES (?, ?)");
+                    $stmt->bind_param("ss", $username, $hashed_password);
+        
+                    if ($stmt->execute()) {
+                        return array("success" => true, "message" => "Registration successful");
+                    } else {
+                        return array("success" => false, "message" => "Registration failed");
+                    }
+                } catch (Exception $e) {
+                    return array("success" => false, "message" => "Error: " . $e->getMessage());
+                }
+            }
+        
+            public function login($username, $password) {
+                try {
+                    // Check if the username exists
+                    $stmt = $this->db->prepare("SELECT * FROM tenants_accounts WHERE username = ?");
+                    $stmt->bind_param("s", $username);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+        
+                    if ($result->num_rows == 0) {
+                        return array("success" => false, "message" => "Username not found");
+                    }
+        
+                    // Fetch user details from the database
+                    $user = $result->fetch_assoc();
+        
+                    // Verify the password
+                    if (password_verify($password, $user['password'])) {
+                        // Password is correct, set session variables or return user data as needed
+                        $_SESSION['user_id'] = $user['id']; // Example: Setting user ID in session
+                        return array("success" => true, "message" => "Login successful");
+                    } else {
+                        return array("success" => false, "message" => "Incorrect password");
+                    }
+                } catch (Exception $e) {
+                    return array("success" => false, "message" => "Error: " . $e->getMessage());
+                }
+            }
+        
+            public function submitMaintenanceRequest($requestText, $requestDate) {
+                try {
+                    // Prepare and execute SQL statement to insert maintenance request into the database
+                    $stmt = $this->db->prepare("INSERT INTO maintenance_requests (request_text, request_date) VALUES (?, ?)");
+                    $stmt->bind_param("ss", $requestText, $requestDate);
+        
+                    if ($stmt->execute()) {
+                        return array("success" => true, "message" => "Maintenance request submitted successfully");
+                    } else {
+                        return array("success" => false, "message" => "Failed to submit maintenance request");
+                    }
+                } catch (Exception $e) {
+                    return array("success" => false, "message" => "Error: " . $e->getMessage());
+                }
+            }
+            
+            public function logout() {
+                // Unset all session variables
+                $_SESSION = array();
+        
+                // Destroy the session
+                session_destroy();
+        
+                // Redirect to the login page
+                header("Location: login.php");
+                exit();
+            }
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Process registration form submission
+            $userAction = new UserAction();
+            $registration_result = $userAction->register($_POST['username'], $_POST['password']);
+            $registration_message = $registration_result['message'];
+            $registration_success = $registration_result['success'];
+        }
+        ?>
+        <form id="registrationForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <div class
+            <form id="registrationForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username">
@@ -100,9 +201,13 @@
                 <input type="submit" value="Register">
             </div>
         </form>
+        <?php if (isset($registration_message)): ?>
+            <p class="<?php echo $registration_success ? 'success-message' : 'error-message'; ?>"><?php echo $registration_message; ?></p>
+        <?php endif; ?>
         <p class="login-link">Already have an account? <a href="user_login.php">Login</a></p>
     </div>
 
+    <!-- Form validation script -->
     <script>
         document.getElementById("registrationForm").addEventListener("submit", function(event) {
             // Prevent form submission if validation fails
@@ -152,3 +257,4 @@
     </script>
 </body>
 </html>
+
