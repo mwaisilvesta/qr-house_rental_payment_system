@@ -9,6 +9,9 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            background-image: url('rent.png'); /* Add the path to your background image */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
             margin: 0;
             padding: 0;
         }
@@ -77,7 +80,7 @@
         <?php if (isset($registration_message)): ?>
             <p class="<?php echo $registration_success ? 'success-message' : 'error-message'; ?>"><?php echo $registration_message; ?></p>
         <?php endif; ?>
-        <form id="registrationForm" method="post" action="">
+        <form id="registrationForm" method="post" action="user_action.php">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username">
