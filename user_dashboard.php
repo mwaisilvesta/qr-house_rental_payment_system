@@ -1,3 +1,10 @@
+<?php
+session_start(); // Start the session
+
+// Include your UserAction class and other necessary files here
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +14,9 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('rent.png'); /* Add the path to your background image */
-            background-size: cover; /* Cover the entire background */
-            background-position: center; /* Center the background image */
+            background-image: url('rent.png');
+            background-size: cover;
+            background-position: center;
             margin: 0;
             padding: 0;
         }
@@ -17,22 +24,25 @@
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: #f9f9f9;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h2 {
-            margin-top: 0;
+        h1, h2, h3 {
+            margin: 10px 0;
             color: #333;
+            text-align: center;
         }
         p {
             color: #666;
+            line-height: 1.5;
         }
         form {
             margin-top: 20px;
         }
         input[type="text"],
-        input[type="email"] {
+        input[type="email"],
+        button {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -41,9 +51,6 @@
             box-sizing: border-box;
         }
         button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
             background-color: #007bff;
             color: #fff;
             cursor: pointer;
@@ -61,6 +68,7 @@
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 20px;
+            text-align: center;
         }
         nav ul {
             list-style-type: none;
@@ -79,7 +87,7 @@
         .panel {
             display: none;
             padding: 20px;
-            background-color: #f3f3f3;
+            background-color: #fff;
             border-radius: 8px;
             margin-top: 20px;
         }
@@ -95,23 +103,24 @@
     <!-- Navigation bar -->
     <nav>
         <ul>
-            <li><a href="make_payment.php">Rent Payment</a></li>
+            <li><a href="make_payment.php">Make Rent Payment</a></li>
             <li><a href="maintainance_request.php">Maintenance Request</a></li>
-            <li><a href="#" id="show-profile">Update User Details</a></li>
+            <li><a href="#" id="show-profile">Update Profile</a></li>
             <li><a href="user_login.php" class="logout-btn">Logout</a></li>
         </ul>
     </nav>
     
     <div class="container">
-        <h2>Welcome to Your Rental Payment System</h2>
-        <p>Hello, tenant! thank you for patnering with us.</p>
+        <h1>Welcome back to QR Rental Payment System</h1>
+        <h2>Hello, <?php echo $_SESSION['username']; ?>!</h2>
+        <p>Thank you for partnering with us. Here you can manage your rental payments and maintenance requests.</p>
         
         <!-- User Profile Panel -->
         <div class="panel" id="profile-panel">
-            <h3>User Profile</h3>
+            <h3>Update User Profile</h3>
             <form method="post" action="">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="JohnDoe" disabled><br>
+                <input type="text" id="username" name="username" value="<?php echo $_SESSION['username']; ?>" disabled><br>
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" value="johndoe@example.com"><br>
                 <button type="submit">Update Profile</button>

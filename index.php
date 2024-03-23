@@ -20,6 +20,9 @@
 <style>
 	body{
         background: #80808045;
+        background-image: url('rent.png'); /* Add the path to your background image */
+        background-size: cover; /* Cover the entire background */
+        background-position: center; /* Center the background image */
   }
   .modal-dialog.large {
     width: 80% !important;

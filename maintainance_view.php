@@ -54,9 +54,19 @@
                 // Include your database connection file here
                 include 'db_connection.php';
 
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
                 // Fetch maintenance requests from the database
                 $sql = "SELECT * FROM maintenance_requests";
                 $result = $conn->query($sql);
+
+                if ($result === false) {
+                    // Handle query error
+                    die("Error executing query: " . $conn->error);
+                }
 
                 // Check if there are any rows returned
                 if ($result->num_rows > 0) {
@@ -71,6 +81,7 @@
                 } else {
                     echo "<tr><td colspan='3'>No maintenance requests found</td></tr>";
                 }
+
                 // Close database connection
                 $conn->close();
                 ?>

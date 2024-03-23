@@ -153,7 +153,15 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `type`) VALUES
 (1, 'Administrator', 'admin', '0192023a7bbd73250516f069df18b500', 1);
 
---
+---- Table structure for table `maintenance_requests`
+CREATE TABLE `maintenance_requests` (
+    `request_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `request_text` TEXT,
+    `request_date` DATE
+);
+
+-- No need to include "Dumping data" section for this table as it will be empty initially
+
 -- Indexes for dumped tables
 --
 
