@@ -16,6 +16,7 @@ if (isset($_SESSION['username'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="assets/font-awesome/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
@@ -106,17 +107,20 @@ if (isset($_SESSION['username'])) {
 </head>
 <body>
     <!-- Navigation bar -->
-    <div class="nav-container">
-        <nav>
-            <ul>
-                <li><a href="user_profileupdate.php">update profile</a></li>
-                <li><a href="make_payment.php">Make Rent Payment</a></li>
-                <li><a href="maintainance_request.php">Maintenance Request</a></li>
-                <li><a href="user_login.php" class="logout-btn">Logout</a></li>
-                <li><a href="retrieving_message.php">messages</a></li>
-            </ul>
-        </nav>
-    </div>
+    <!-- Navigation bar -->
+<div class="nav-container">
+    <nav>
+        <ul>
+            <li><a href="user_profileupdate.php"><i class="fas fa-user"></i> Update Profile</a></li>
+            <li><a href="make_payment.php"><i class="fas fa-money-bill-wave"></i> Make Rent Payment</a></li>
+            <li><a href="maintainance_request.php"><i class="fas fa-tools"></i> Maintenance Request</a></li>
+            <li><a href="retrieving_message.php"><i class="fas fa-bell"></i> Notifications</a></li>
+            <li><a href="user_login.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            
+        </ul>
+    </nav>
+</div>
+
     
     <div class="container">
         <div class="content">
