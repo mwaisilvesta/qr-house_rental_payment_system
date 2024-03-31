@@ -1,10 +1,18 @@
 <?php
-session_start(); // Start the session
-
-// Include your UserAction class and other necessary files here
-
+session_start();
+include 'user_action.php';
+if (isset($_SESSION['username'])) {
+    // The username session variable is set
+    // You can proceed with using it
+    $username = $_SESSION['username'];
+} else {
+    // The username session variable is not set
+    // Handle the case where the user is not logged in or the session variable is not set
+    // For example, redirect to the login page or display a message
+    header("Location: login.php");
+    exit();
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +28,35 @@ session_start(); // Start the session
             margin: 0;
             padding: 0;
         }
+        .nav-container {
+            width: 200px;
+            margin-right: 20px;
+        }
+        nav {
+            background-color: #007bff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            margin-bottom: 10px;
+        }
+        nav ul li a {
+            display: block;
+            padding: 10px 15px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        nav ul li a:hover {
+            background-color: #0056b3;
+        }
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -27,23 +64,29 @@ session_start(); // Start the session
             background-color: #f9f9f9;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
         }
-        h1, h2, h3 {
-            margin: 10px 0;
-            color: #333;
-            text-align: center;
+        .content {
+            flex: 1;
         }
-        p {
-            color: #666;
-            line-height: 1.5;
-        }
-        form {
+        .panel {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
             margin-top: 20px;
+        }
+        .panel h3 {
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
         }
         input[type="text"],
         input[type="email"],
         button {
-            width: 100%;
+            width: calc(100% - 30px);
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
@@ -59,85 +102,28 @@ session_start(); // Start the session
         button:hover {
             background-color: #0056b3;
         }
-        .logout-btn {
-            background-color: #dc3545;
-        }
-        /* Navigation bar styles */
-        nav {
-            background-color: #333;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-        }
-        /* Panel styles */
-        .panel {
-            display: none;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        /* Responsive adjustments */
-        @media (max-width: 1024px) {
-            .container {
-                max-width: 90%;
-            }
-        }
     </style>
 </head>
 <body>
     <!-- Navigation bar -->
-    <nav>
-        <ul>
-            <li><a href="make_payment.php">Make Rent Payment</a></li>
-            <li><a href="maintainance_request.php">Maintenance Request</a></li>
-            <li><a href="#" id="show-profile">Update Profile</a></li>
-            <li><a href="user_login.php" class="logout-btn">Logout</a></li>
-        </ul>
-    </nav>
+    <div class="nav-container">
+        <nav>
+            <ul>
+                <li><a href="user_profileupdate.php">update profile</a></li>
+                <li><a href="make_payment.php">Make Rent Payment</a></li>
+                <li><a href="maintainance_request.php">Maintenance Request</a></li>
+                <li><a href="user_login.php" class="logout-btn">Logout</a></li>
+                <li><a href="retrieving_message.php">messages</a></li>
+            </ul>
+        </nav>
+    </div>
     
     <div class="container">
-        <h1>Welcome back to QR Rental Payment System</h1>
-        <h2>Hello, <?php echo $_SESSION['username']; ?>!</h2>
-        <p>Thank you for partnering with us. Here you can manage your rental payments and maintenance requests.</p>
-        
-        <!-- User Profile Panel -->
-        <div class="panel" id="profile-panel">
-            <h3>Update User Profile</h3>
-            <form method="post" action="">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="<?php echo $_SESSION['username']; ?>" disabled><br>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="johndoe@example.com"><br>
-                <button type="submit">Update Profile</button>
-            </form>
+        <div class="content">
+            
+            <h1>Hello, <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?>!</h1>
+            <p>Thank you for partnering with us. Here you can manage your rental payments and maintenance requests.</p>
         </div>
     </div>
-
-    <script>
-        // Function to toggle profile panel visibility
-        document.getElementById('show-profile').addEventListener('click', function() {
-            var panel = document.getElementById('profile-panel');
-            if (panel.style.display === 'none') {
-                panel.style.display = 'block';
-            } else {
-                panel.style.display = 'none';
-            }
-        });
-    </script>
 </body>
 </html>

@@ -1,6 +1,18 @@
 <?php
 session_start();
 include 'user_action.php';
+if (isset($_SESSION['username'])) {
+    // The username session variable is set
+    // You can proceed with using it
+    $username = $_SESSION['username'];
+} else {
+    // The username session variable is not set
+    // Handle the case where the user is not logged in or the session variable is not set
+    // For example, redirect to the login page or display a message
+    header("Location: login.php");
+    exit();
+}
+
 
 $userAction = new UserAction();
 $login_error = ""; // Initialize login error message

@@ -16,8 +16,9 @@
         <a href="index.php?page=tenants" class="nav-item nav-tenants"><span class='icon-field'><i class="fa fa-user-friends"></i></span> Tenants</a>
         <a href="index.php?page=invoices" class="nav-item nav-invoices"><span class='icon-field'><i class="fa fa-file-invoice"></i></span> Payments</a>
         <a href="index.php?page=reports" class="nav-item nav-reports"><span class='icon-field'><i class="fa fa-list-alt"></i></span> Reports</a>
-        <a href="rent_reminder.html" class="nav-item nav-rent-reminder"><span class='icon-field'><i class="fa fa-bell"></i></span> Rent Reminder</a>
+        <a href="view_messages.php" class="nav-item nav-reminders"><span class='icon-field'><i class="fa fa-comment"></i></span> sent Reminder</a>
         <a href="maintainance_view.php" class="nav-item nav-maintenance"><span class='icon-field'><i class="fa fa-wrench"></i></span> Maintenance View</a>
+        <a href="sending_messages.html" class="nav-item sending_messages"><span class='icon-field'><i class="fa fa-bell"></i></span> sending reminders</a>
         <?php if($_SESSION['login_type'] == 1): ?>
             <a href="index.php?page=users" class="nav-item nav-users"><span class='icon-field'><i class="fa fa-users"></i></span> Users</a>
             <!-- <a href="index.php?page=site_settings" class="nav-item nav-site_settings"><span class='icon-field'><i class="fa fa-cogs text-danger"></i></span> System Settings</a> -->
