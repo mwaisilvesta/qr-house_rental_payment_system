@@ -79,6 +79,19 @@ $user_id = $_SESSION['user_id'];
             display: block;
             margin-top: 20px;
         }
+        .dashboard-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #333;
+            background-color: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+        .dashboard-link:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
@@ -138,7 +151,7 @@ $user_id = $_SESSION['user_id'];
                 }
 
                 // Insert payment details into database
-                $sql = "INSERT INTO stripe_payments (email, amount, charge_id) VALUES ('$user_id', '$amount', '$charge->id')";
+                $sql = "INSERT INTO stripe_payments (tenants_email, amount, charge_id) VALUES ('$user_id', '$amount', '$charge->id')";
 
                 if ($conn->query($sql) === TRUE) {
                     echo '<p style="text-align: center;">Payment details saved successfully.</p>';
@@ -155,6 +168,10 @@ $user_id = $_SESSION['user_id'];
             }
         }
         ?>
+        <!-- Button to redirect to dashboard -->
+        <!-- Button to redirect to dashboard -->
+<a href="user_dashboard.php" class="dashboard-link" style="background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 4px; text-decoration: none;">Go to Dashboard</a>
+
     </div>
 </body>
 </html>
