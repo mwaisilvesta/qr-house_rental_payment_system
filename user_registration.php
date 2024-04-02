@@ -142,21 +142,7 @@
                 }
             }
         
-            public function submitMaintenanceRequest($requestText, $requestDate) {
-                try {
-                    // Prepare and execute SQL statement to insert maintenance request into the database
-                    $stmt = $this->db->prepare("INSERT INTO maintenance_requests (request_text, request_date) VALUES (?, ?)");
-                    $stmt->bind_param("ss", $requestText, $requestDate);
-        
-                    if ($stmt->execute()) {
-                        return array("success" => true, "message" => "Maintenance request submitted successfully");
-                    } else {
-                        return array("success" => false, "message" => "Failed to submit maintenance request");
-                    }
-                } catch (Exception $e) {
-                    return array("success" => false, "message" => "Error: " . $e->getMessage());
-                }
-            }
+            
             
             public function logout() {
                 // Unset all session variables
