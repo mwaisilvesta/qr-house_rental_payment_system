@@ -1,6 +1,6 @@
 module payment-api
 
-go 1.21.7
+go 1.21
 
 require (
 	github.com/jwambugu/mpesa-golang-sdk v1.0.8 // indirect
