@@ -105,7 +105,7 @@ $username = $_SESSION['username'];
                 <li><a href="maintainance_request.php"><i class="fas fa-tools"></i> Maintenance Request</a></li>
                 <li><a href="retrieving_message.php"><i class="fas fa-bell"></i> Notifications</a></li>
                 <li><a href="history.php"><i class="fas fa-history"></i> Payment History</a></li>
-                <li><a href="user_login.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="main_page.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </nav>
     </div>

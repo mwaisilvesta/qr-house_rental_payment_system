@@ -10,19 +10,19 @@ class UserAction {
 
     public function register($username, $password) {
         try {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    
-            // Check if the username (email) already exists in the 'tenants' table
-            $stmt = $this->db->prepare("SELECT * FROM tenants WHERE email = ?");
-            $stmt->bind_param("s", $username); // Assuming the 'email' column contains usernames
-            $stmt->execute();
-            $result = $stmt->get_result();
-    
-            if ($result->num_rows == 0) {
-                return array("success" => false, "message" => "Username does not exist in tenants table");
+            // Validate username and password
+            if (!$this->isValidUsername($username)) {
+                return array("success" => false, "message" => "Invalid username format (must be a valid email address)");
             }
     
-            // Check if the username already exists in the 'tenants_accounts' table
+            if (!$this->isValidPassword($password)) {
+                return array("success" => false, "message" => "Invalid password format");
+            }
+    
+            // Hash the password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
+            // Check if the username already exists in the database
             $stmt = $this->db->prepare("SELECT * FROM tenants_accounts WHERE username = ?");
             $stmt->bind_param("s", $username);
             $stmt->execute();
@@ -46,12 +46,12 @@ class UserAction {
         }
     }
     
-
-    
-    
     
 
-    public function login($username, $password) {
+    
+    
+    
+ public function login($username, $password) {
         try {
             // Check if the username exists
             $stmt = $this->db->prepare("SELECT * FROM tenants_accounts WHERE username = ?");
