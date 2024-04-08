@@ -19,8 +19,8 @@ const (
 	addr    = ":8000"
 	baseURL = "http://localhost" + addr
 	//baseURL        = "https://bc3f-197-232-68-238.ngrok-free.app"
-	consumerKey    = ""
-	consumerSecret = ""
+	consumerKey    = "bRDPwQlV8jmi9YAhYFjWywVslIMWK6AfDnGQu1Kv12NiQdVe"
+	consumerSecret = "tvXhhA6WCw8pPARhpUyBjEFIs7rA8wt7GVG0Yls1Zsb7lgGeGC0cqcRuWNaY7LWM"
 )
 
 var uploadPath = "storage"
