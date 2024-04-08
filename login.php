@@ -15,136 +15,147 @@ ob_end_flush();
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
   <title><?php echo $_SESSION['system']['name'] ?></title>
- 	
+  <?php include('./header.php'); ?>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      background-image: url('rent.png'); /* Add the path to your background image */
+      background-size: cover; /* Cover the entire background */
+      background-position: center; /* Center the background image */
 
-<?php include('./header.php'); ?>
-<?php 
-if(isset($_SESSION['login_id']))
-header("location:index.php?page=home");
 
-?>
+      margin: 0;
+      padding: 0;
+    }
 
+    main#main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    #login-left {
+      flex: 1;
+      background: url('assets/uploads/blood-cells.jpg') center center/cover;
+      position: relative;
+    }
+
+    #login-right {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .card {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    .alert-danger {
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
-<style>
-	body{
-		width: 100%;
-	    height: calc(100%);
-	    /*background: #007bff;*/
-	}
-	main#main{
-		width:100%;
-		height: calc(100%);
-		background:white;
-	}
-	#login-right{
-		position: absolute;
-		right:0;
-		width:40%;
-		height: calc(100%);
-		background:white;
-		display: flex;
-		align-items: center;
-	}
-	#login-left{
-		position: absolute;
-		left:0;
-		width:60%;
-		height: calc(100%);
-		background:#59b6ec61;
-		display: flex;
-		align-items: center;
-		/*background: url(assets/uploads/blood-cells.jpg);
-	    background-repeat: no-repeat;
-	    background-size: cover;*/
-	}
-	#login-right .card{
-		margin: auto;
-		z-index: 1
-	}
-	.logo {
-    margin: auto;
-    font-size: 8rem;
-    background: white;
-    padding: .5em 0.7em;
-    border-radius: 50% 50%;
-    color: #000000b3;
-    z-index: 10;
-}
-div#login-right::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: calc(100%);
-    height: calc(100%);
-    /*background: #000000e0;*/
-}
-
-</style>
 
 <body>
+  <main id="main">
+    <div id="login-left"></div>
 
-
-  <main id="main" class=" bg-light">
-  		<div id="login-left" class="bg-dark">
-  		</div>
-
-  		<div id="login-right" class="bg-light">
-  			<div class="w-100">
-			<h4 class="text-white text-center"><b><?php echo $_SESSION['system']['name'] ?></b></h4>
-			<br>
-			<br>
-  			<div class="card col-md-8">
-  				<div class="card-body">
-  					<form id="login-form" >
-  						<div class="form-group">
-  							<label for="username" class="control-label">Username</label>
-  							<input type="text" id="username" name="username" class="form-control">
-  						</div>
-  						<div class="form-group">
-  							<label for="password" class="control-label">Password</label>
-  							<input type="password" id="password" name="password" class="form-control">
-  						</div>
-  						<center><button class="btn-sm btn-block btn-wave col-md-4 btn-primary">Login</button></center>
-  					</form>
-  				</div>
-  			</div>
-  			</div>
-  		</div>
-   
-
+    <div id="login-right">
+      <div class="w-100">
+        <h4 class="text-center mb-4"><?php echo $_SESSION['system']['name'] ?></h4>
+        <div class="card">
+          <div class="card-body">
+            <form id="login-form">
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            <?php if(isset($_SESSION['login_id'])): ?>
+              <div class="alert alert-danger">You are already logged in.</div>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
-
-
+  <script>
+    $('#login-form').submit(function(e) {
+      e.preventDefault();
+      var form = $(this);
+      form.find('button[type="submit"]').attr('disabled', true).html('Logging in...');
+      if (form.find('.alert-danger').length > 0) form.find('.alert-danger').remove();
+      $.ajax({
+        url: 'ajax.php?action=login',
+        method: 'POST',
+        data: form.serialize(),
+        error: function(err) {
+          console.log(err);
+          form.find('button[type="submit"]').removeAttr('disabled').html('Login');
+        },
+        success: function(resp) {
+          if (resp == 1) {
+            location.href = 'index.php?page=home';
+          } else {
+            form.prepend('<div class="alert alert-danger">Username or password is incorrect.</div>');
+            form.find('button[type="submit"]').removeAttr('disabled').html('Login');
+          }
+        }
+      });
+    });
+  </script>
 </body>
-<script>
-	$('#login-form').submit(function(e){
-		e.preventDefault()
-		$('#login-form button[type="button"]').attr('disabled',true).html('Logging in...');
-		if($(this).find('.alert-danger').length > 0 )
-			$(this).find('.alert-danger').remove();
-		$.ajax({
-			url:'ajax.php?action=login',
-			method:'POST',
-			data:$(this).serialize(),
-			error:err=>{
-				console.log(err)
-		$('#login-form button[type="button"]').removeAttr('disabled').html('Login');
-
-			},
-			success:function(resp){
-				if(resp == 1){
-					location.href ='index.php?page=home';
-				}else{
-					$('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
-					$('#login-form button[type="button"]').removeAttr('disabled').html('Login');
-				}
-			}
-		})
-	})
-</script>	
 </html>
