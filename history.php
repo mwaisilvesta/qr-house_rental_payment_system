@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db_connect.php';
-include 'user_actions.php';
+include 'user_action.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
