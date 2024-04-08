@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db_connect.php';
-include 'user_actions.php';
+include 'user_action.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
@@ -101,16 +101,20 @@ $user_id = $_SESSION['user_id'];
             <!-- Removed email input -->
             <label for="amount">Amount:</label>
             <input type="text" id="amount" name="amount" placeholder="Enter amount">
-            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button submit"
-                    data-key="pk_test_51MrHUCFq0XdzIScyVqERfDveXZe4JrInGhNSlGJLjd9mA6LRxMnDpxahKfx1sMVYJcayjORgpbAIc155uJGV5dGP00El6RxIsy"
-                    data-amount=""
-                    data-name="Rental Payment"
-                    data-description="Rental Payment"
-                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                    data-locale="auto"
-                    data-currency="kES"
-                    data-email="">
-            </script>
+            <button type="submit" style="background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 4px; text-decoration: none;" name="pay-with-qr">
+                Pay with QR
+            </button>
+
+<!--            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button submit"-->
+<!--                    data-key="pk_test_51MrHUCFq0XdzIScyVqERfDveXZe4JrInGhNSlGJLjd9mA6LRxMnDpxahKfx1sMVYJcayjORgpbAIc155uJGV5dGP00El6RxIsy"-->
+<!--                    data-amount=""-->
+<!--                    data-name="Rental Payment"-->
+<!--                    data-description="Rental Payment"-->
+<!--                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"-->
+<!--                    data-locale="auto"-->
+<!--                    data-currency="kES"-->
+<!--                    data-email="">-->
+<!--            </script>-->
         </form>
 
         <?php
@@ -121,6 +125,49 @@ $user_id = $_SESSION['user_id'];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Get the amount and stripeToken from the form
             $amount = $_POST['amount'];
+            if ($amount===0){
+                echo "Amount is required.";
+                return;
+            }
+
+
+            if(isset($_POST['pay-with-qr'])) {
+                $url = 'http://localhost:8000/';
+                $data = array(
+                    'amount' => (int)$amount,
+                    'house_id' => 1, // Add house id here
+                    'phone_number' => 254714540541 // Add current auth phone number here, ensure it's in the format of 254xxxxxxxxx
+                );
+
+                $data_json = json_encode($data);
+                $ch = curl_init($url);
+
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                $response = curl_exec($ch);
+                $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+
+                if ($http_status != 200) {
+                    echo "Sorry! Something went wrong on the server side";
+                    return;
+
+                }
+
+                $decoded_response = json_decode($response, true);
+
+                if ($decoded_response === null) {
+                    echo "Failed to decode JSON response";
+                    return;
+                }
+
+                $qr_code_path = $decoded_response['qr_code'];
+                echo "QR Code Path: $qr_code_path";
+                return;
+            }
             $stripeToken = $_POST['stripeToken'];
 
             try {

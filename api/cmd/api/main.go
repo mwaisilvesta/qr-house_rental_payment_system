@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/skip2/go-qrcode"
 	"log"
@@ -15,11 +16,14 @@ import (
 )
 
 const (
-	addr           = ":8000"
-	baseURL        = "http://localhost" + addr
+	addr    = ":8000"
+	baseURL = "http://localhost" + addr
+	//baseURL        = "https://bc3f-197-232-68-238.ngrok-free.app"
 	consumerKey    = ""
 	consumerSecret = ""
 )
+
+var uploadPath = "storage"
 
 type generateQRCodeReq struct {
 	Amount      uint32 `json:"amount,omitempty"`
@@ -73,18 +77,10 @@ func paymentHandler(w http.ResponseWriter, r *http.Request) {
 		paymentURL := baseURL + "?" + params.Encode()
 		log.Println(paymentURL)
 
-		wd, err := os.Getwd()
-		if err != nil {
-			log.Printf("get wd: %v\n", err)
-
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
 		filename := fmt.Sprintf("%s-%s-%s.png", houseIDStr, amountStr, phoneNumberStr)
-		filename = filepath.Join(wd, "storage", "qrcodes", filename)
+		path := filepath.Join(uploadPath, filename)
 
-		err = qrcode.WriteFile(paymentURL, qrcode.High, 256, filename)
+		err := qrcode.WriteFile(paymentURL, qrcode.High, 256, path)
 		if err != nil {
 			log.Printf("generate qr: %v\n", err)
 
@@ -92,7 +88,11 @@ func paymentHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp := &generateQRCodeRes{QrCode: filename}
+		var (
+			fileURL = baseURL + "/static/" + filename
+			resp    = &generateQRCodeRes{QrCode: fileURL}
+		)
+
 		payload, err := json.Marshal(resp)
 		if err != nil {
 			log.Printf("marshal response: %v\n", err)
@@ -151,7 +151,20 @@ func paymentHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	mux := http.NewServeMux()
+	if _, err := os.Stat(uploadPath); err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			if err = os.MkdirAll(uploadPath, os.ModePerm); err != nil {
+				log.Panicf("mkdir: %v\n", err)
+			}
+		}
+	}
+
+	var (
+		mux = http.NewServeMux()
+		fs  = http.FileServer(http.Dir(uploadPath))
+	)
+
+	mux.Handle("/static/", http.StripPrefix("/static", fs))
 	mux.HandleFunc("/", paymentHandler)
 
 	log.Printf("server running on port: %v", addr)
