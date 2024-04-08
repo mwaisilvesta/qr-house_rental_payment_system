@@ -101,6 +101,7 @@ $username = $_SESSION['username'];
             <ul>
                 <li><a href="user_profileupdate.php"><i class="fas fa-user"></i> Update Profile</a></li>
                 <li><a href="make_payment.php"><i class="fas fa-money-bill-wave"></i> Make Rent Payment</a></li>
+                <li><a href="qrcode_payment.html"><i class="fas fa-money-bill-wave"></i> qrcode Rent Payment</a></li>
                 <li><a href="maintainance_request.php"><i class="fas fa-tools"></i> Maintenance Request</a></li>
                 <li><a href="retrieving_message.php"><i class="fas fa-bell"></i> Notifications</a></li>
                 <li><a href="history.php"><i class="fas fa-history"></i> Payment History</a></li>
