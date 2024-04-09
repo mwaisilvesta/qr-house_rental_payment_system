@@ -133,10 +133,11 @@ $user_id = $_SESSION['user_id'];
 
             if(isset($_POST['pay-with-qr'])) {
                 $url = 'http://localhost:8000/';
+                $phone_number = 254714540541; // Add current auth phone number here, ensure it's in the format of 254xxxxxxxxx
                 $data = array(
                     'amount' => (int)$amount,
                     'house_id' => 1, // Add house id here
-                    'phone_number' => 254714540541 // Add current auth phone number here, ensure it's in the format of 254xxxxxxxxx
+                    'phone_number' => $phone_number
                 );
 
                 $data_json = json_encode($data);
@@ -164,8 +165,17 @@ $user_id = $_SESSION['user_id'];
                     return;
                 }
 
-                $qr_code_path = $decoded_response['qr_code'];
-                echo "QR Code Path: $qr_code_path";
+                $qr_code = $decoded_response['qr_code'];
+
+                $query = "INSERT INTO qrcode_payments (tenant_id, qrcode, amount, phone_number) VALUES ('$user_id', '$qr_code', '$amount', '$phone_number')";
+                if (!$conn->query($query)) {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                    return;
+                }
+
+                echo '<br>';
+                echo '<img src="' . $qr_code . '">';
+
                 return;
             }
             $stripeToken = $_POST['stripeToken'];

@@ -17,8 +17,8 @@ import (
 
 const (
 	addr    = ":8000"
-	//baseURL = "http://localhost" + addr
-	baseURL        = "https://b95b-196-202-217-217.ngrok-free.app"
+	baseURL = "http://localhost" + addr
+	//baseURL        = "https://b95b-196-202-217-217.ngrok-free.app"
 	consumerKey    = "bRDPwQlV8jmi9YAhYFjWywVslIMWK6AfDnGQu1Kv12NiQdVe"
 	consumerSecret = "tvXhhA6WCw8pPARhpUyBjEFIs7rA8wt7GVG0Yls1Zsb7lgGeGC0cqcRuWNaY7LWM"
 )
