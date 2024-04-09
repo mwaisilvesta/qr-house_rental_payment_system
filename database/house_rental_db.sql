@@ -146,7 +146,12 @@ INSERT INTO `payments` (`id`, `tenant_id`, `amount`, `invoice`, `date_created`) 
 --
 
 CREATE TABLE `qrcode_payments` (
-  `qrcode` text NOT NULL
+  `id` int primary key auto_increment NOT NULL,
+  `tenant_id` int NOT NULL,
+  `qrcode` text NOT NULL,
+  `amount` int NOT NULL,
+  `phone_number` varchar(15) NOT NULL,
+  `created_at` datetime not null default current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
